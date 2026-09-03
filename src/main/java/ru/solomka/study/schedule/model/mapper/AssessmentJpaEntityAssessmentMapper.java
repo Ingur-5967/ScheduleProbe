@@ -23,13 +23,13 @@ public class AssessmentJpaEntityAssessmentMapper implements Mapper<Assessment, A
     @Override
     public AssessmentJpaEntity mapToInfra(Assessment domain) {
         return AssessmentJpaEntity.builder()
-                .subjectId(domain.getSubjectId())
-                .teacherId(domain.getTeacherId())
-                .type(domain.getType())
-                .groupId(domain.getGroupId())
-                .roomId(domain.getRoomId())
-                .startTime(domain.getStartTime())
-                .endTime(domain.getEndTime())
+                .subjectId(domain.subjectId())
+                .teacherId(domain.teacherId())
+                .type(domain.type())
+                .groupId(domain.groupId())
+                .roomId(domain.roomId())
+                .startTime(domain.startTime())
+                .endTime(domain.endTime())
                 .build();
     }
 }
