@@ -13,7 +13,6 @@ public class UserJpaEntityUserMapper implements Mapper<User, UserJpaEntity> {
                 infra.getId(),
                 infra.getUsername(),
                 infra.getPasswordHash(),
-                infra.getPassId(),
                 infra.getRole(),
                 infra.getCreatedAt()
         );
@@ -25,7 +24,6 @@ public class UserJpaEntityUserMapper implements Mapper<User, UserJpaEntity> {
                 .id(domain.id())
                 .username(domain.username())
                 .passwordHash(domain.passwordHash())
-                .passId(domain.passId())
                 .role(domain.role())
                 .createdAt(domain.createdAt())
                 .build();

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface LessonJpaRepository extends JpaRepository<LessonJpaRepository, UUID> {
+public interface LessonJpaRepository extends JpaRepository<LessonJpaEntity, UUID> {
 
     List<LessonJpaEntity> findAllLessonByGroupId(Long groupId);
 

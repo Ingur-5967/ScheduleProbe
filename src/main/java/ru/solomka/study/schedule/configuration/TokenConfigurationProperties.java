@@ -10,7 +10,7 @@ import java.time.Duration;
 
 @Configuration
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ConfigurationProperties(prefix = "jwt")
 public class TokenConfigurationProperties {
     String secretKey;

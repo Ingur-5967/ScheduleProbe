@@ -1,6 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS soc;
-
-CREATE TABLE soc.users
+CREATE TABLE users
 (
     id            UUID PRIMARY KEY,
     username      VARCHAR(55) NOT NULL UNIQUE,
@@ -9,7 +7,7 @@ CREATE TABLE soc.users
     created_at    TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
-CREATE TABLE soc.lessons
+CREATE TABLE lessons
 (
     id            UUID PRIMARY KEY,
     name          VARCHAR(150) NOT NULL,
@@ -23,7 +21,7 @@ CREATE TABLE soc.lessons
     end_time      BIGINT       NOT NULL
 );
 
-CREATE TABLE soc.assessments
+CREATE TABLE assessments
 (
     id              UUID PRIMARY KEY,
     subject_id      BIGINT       NOT NULL,
@@ -35,7 +33,7 @@ CREATE TABLE soc.assessments
     end_time        BIGINT       NOT NULL
 );
 
-CREATE TABLE soc.refresh_tokens
+CREATE TABLE refresh_tokens
 (
     id            UUID PRIMARY KEY,
     refresh_token TEXT           NOT NULL,

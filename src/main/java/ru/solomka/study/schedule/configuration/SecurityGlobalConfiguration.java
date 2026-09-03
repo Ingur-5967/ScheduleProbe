@@ -10,7 +10,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.solomka.study.schedule.api.model.security.UserRole;
+import ru.solomka.study.schedule.security.filter.OnceHttpPerRequestFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -18,18 +25,26 @@ import ru.solomka.study.schedule.api.model.security.UserRole;
 public class SecurityGlobalConfiguration {
 
     @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    HttpSecurity configurationHttpSecurity(HttpSecurity httpSecurity) {
+    SecurityFilterChain configurationHttpSecurity(HttpSecurity httpSecurity, OnceHttpPerRequestFilter onceHttpPerRequestFilter) {
         return httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers("/admin/**").hasAnyRole(UserRole.DEANERY.name(), UserRole.OPERATOR.name())
-                .requestMatchers("/teacher/**").hasAnyRole(UserRole.TEACHER.name())
-                .requestMatchers("/view/**").permitAll()
-                .anyRequest().authenticated()
-        );
+                        .requestMatchers("/admin/**").hasAnyRole(UserRole.DEANERY.name(), UserRole.OPERATOR.name())
+                        .requestMatchers("/teacher/**").hasAnyRole(UserRole.TEACHER.name())
+                        .requestMatchers("/view/**").permitAll()
+                        .anyRequest().authenticated()
+                ).addFilterBefore(onceHttpPerRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
     }
 
     @Bean
