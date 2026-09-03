@@ -8,7 +8,7 @@ import ru.solomka.study.schedule.api.model.LessonType;
 import java.util.UUID;
 
 @Entity
-@Table(name = "lessons")
+@Table(schema = "soc", name = "lessons")
 @Getter
 @Setter
 @AllArgsConstructor
