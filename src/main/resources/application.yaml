@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: feature.flag
+    security:
+      jwt:
+        secret_key: ${SECRET_JWT_KEY}
+        access_token_expiration: ${ACCESS_TOKEN_EXPIRATION}
+        refresh_token_expiration: ${REFRESH_TOKEN_EXPIRATION}
