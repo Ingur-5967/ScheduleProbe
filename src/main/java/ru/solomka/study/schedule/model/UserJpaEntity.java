@@ -29,6 +29,7 @@ public class UserJpaEntity {
     String passwordHash;
 
     @Column(name = "role", nullable = false)
+    @Enumerated(value = EnumType.STRING)
     UserRole role;
 
     @Column(name = "created_at", nullable = false)

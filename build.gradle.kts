@@ -42,8 +42,8 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
 
-	implementation("org.flywaydb:flyway-core:4.0.3")
-	implementation("org.flywaydb:flyway-database-postgresql")
+	implementation("org.springframework.boot:spring-boot-starter-flyway")
+	runtimeOnly("org.flywaydb:flyway-database-postgresql")
 }
 
 tasks.withType<Test> {

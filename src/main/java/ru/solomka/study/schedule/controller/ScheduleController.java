@@ -37,7 +37,6 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/class", produces = "application/json")
-    @GhostPreAuthorize
     public ResponseEntity<List<ScheduleInfo>> getScheduleForGroup(@RequestParam("groupId") Long groupId) {
         List<Lesson> lessons = lessonService.findAllLessonByGroupId(groupId);
         return ResponseEntity.ok(scheduleHelper.buildScheduleInfo(lessons));
