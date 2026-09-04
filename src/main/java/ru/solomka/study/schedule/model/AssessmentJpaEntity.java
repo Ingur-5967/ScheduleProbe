@@ -18,8 +18,13 @@ import java.util.UUID;
 public class AssessmentJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessons_seq")
+    @SequenceGenerator(
+            name = "lessons_seq",
+            sequenceName = "lessons_id_seq",
+            allocationSize = 1
+    )
+    Long id;
 
     @Column(name = "subject_id", nullable = false)
     Long subjectId;

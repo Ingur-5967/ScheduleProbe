@@ -1,6 +1,9 @@
 package ru.solomka.study.schedule.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.solomka.study.schedule.model.LessonJpaEntity;
 
@@ -9,6 +12,10 @@ import java.util.UUID;
 
 @Repository
 public interface LessonJpaRepository extends JpaRepository<LessonJpaEntity, UUID> {
+
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM LessonJpaEntity e WHERE e.dayOfWeek IN :days")
+    void deleteLessonsInDaysOfWeek(@Param("days") List<Integer> days);
 
     List<LessonJpaEntity> findAllLessonByGroupId(Long groupId);
 

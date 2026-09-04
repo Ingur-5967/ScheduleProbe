@@ -11,7 +11,7 @@ import ru.solomka.study.schedule.security.jwt.TokenPair;
 import ru.solomka.study.schedule.service.SecurityService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityController {
 

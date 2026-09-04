@@ -1,3 +1,6 @@
+CREATE SEQUENCE lessons_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE assessments_id_seq START WITH 1 INCREMENT BY 1;
+
 CREATE TABLE users
 (
     id            UUID PRIMARY KEY,
@@ -9,7 +12,7 @@ CREATE TABLE users
 
 CREATE TABLE lessons
 (
-    id            UUID PRIMARY KEY,
+    id            BIGINT PRIMARY KEY DEFAULT nextval('lessons_id_seq'),
     name          VARCHAR(150) NOT NULL,
     lesson_type   VARCHAR(80)  NOT NULL,
     teacher_name  VARCHAR(100) NOT NULL,
@@ -23,7 +26,7 @@ CREATE TABLE lessons
 
 CREATE TABLE assessments
 (
-    id              UUID PRIMARY KEY,
+    id              BIGINT PRIMARY KEY DEFAULT nextval('assessments_id_seq'),
     subject_id      BIGINT       NOT NULL,
     teacher_id      BIGINT       NOT NULL,
     assessment_type VARCHAR(50)  NOT NULL,

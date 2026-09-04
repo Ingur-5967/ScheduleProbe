@@ -13,7 +13,7 @@ import ru.solomka.study.schedule.security.ScheduleUserDetail;
 import ru.solomka.study.schedule.security.annotation.GhostPreAuthorize;
 
 @RestController
-@RequestMapping("/lk")
+@RequestMapping("/api/v1/lk")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
 

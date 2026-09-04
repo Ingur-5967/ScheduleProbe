@@ -30,6 +30,7 @@ public class TokenFactoryImpl implements TokenFactory {
         return Jwts.builder()
                 .subject(user.username())
                 .claims()
+                .add("id", user.id())
                 .add("username", user.username())
                 .add("role", user.role())
                 .add("type", tokenType)
