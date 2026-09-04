@@ -26,6 +26,20 @@ public class AssessmentService implements AssessmentRepository {
     }
 
     @Override
+    public Assessment create(Assessment assessment) {
+        AssessmentJpaEntity assessmentJpaEntity = mapper.mapToInfra(assessment);
+        return mapper.mapToDomain(assessmentJpaRepository.save(assessmentJpaEntity));
+    }
+
+    @Override
+    public List<Assessment> createAll(List<Assessment> assessments) {
+        List<AssessmentJpaEntity> assessmentJpaEntities = assessments.stream().map(mapper::mapToInfra).toList();
+        return assessmentJpaRepository.saveAll(assessmentJpaEntities).stream()
+                .map(mapper::mapToDomain)
+                .toList();
+    }
+
+    @Override
     public List<Assessment> findAllAssessmentByGroupId(String groupId, List<AssessmentType> types) {
         List<AssessmentJpaEntity> assessmentJpaEntities = assessmentJpaRepository.findAllByGroupIdAndTypeIn(
                 groupId,

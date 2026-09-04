@@ -17,9 +17,26 @@ public class ScheduleHelper {
                 .toList();
     }
 
+    public List<Lesson> buildLessonByScheduleInfo(String groupId, List<ScheduleInfo> scheduleInfo) {
+        return scheduleInfo.stream().flatMap(info -> info.dayScheduleDetail().stream().map(detail ->
+                new Lesson(
+                        detail.lessonName(),
+                        detail.lessonType(),
+                        detail.teacherName(),
+                        detail.roomId(),
+                        groupId,
+                        info.dayOfWeek(),
+                        false,
+                        detail.startTime(),
+                        detail.endTime()
+                )
+        )).toList();
+    }
+
     private List<ScheduleItem> buildScheduleItem(List<Lesson> lessons) {
         return lessons.stream().map(lesson -> new ScheduleItem(
                 lesson.name(),
+                lesson.type(),
                 lesson.roomId(),
                 lesson.teacherName(),
                 lesson.startTime(),

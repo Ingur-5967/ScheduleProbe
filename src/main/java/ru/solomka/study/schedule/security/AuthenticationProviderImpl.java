@@ -5,7 +5,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.security.jwt.TokenEntity;
 
 import java.util.List;
 
@@ -13,11 +12,11 @@ import java.util.List;
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     @Override
-    public void authenticate(TokenEntity token) {
+    public void authenticate(ScheduleUserDetail userDetail) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                token,
+                userDetail,
                 null,
-                List.of(new SimpleGrantedAuthority("ROLE_" + token.role().name()))
+                List.of(new SimpleGrantedAuthority("ROLE_" + userDetail.getRole().name()))
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

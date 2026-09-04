@@ -8,6 +8,10 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
+      jdbc:
+        batch_size: 100
+      order_inserts: true
+      order_updates: true
       ddl-auto: validate
     open-in-view: false
   flyway:

@@ -13,6 +13,7 @@ import ru.solomka.study.schedule.security.jwt.TokenType;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
+import java.util.UUID;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,6 +36,7 @@ public class TokenExtractorImpl implements TokenExtractor {
                 .getPayload();
 
         return new TokenEntity(
+                claims.get("id", UUID.class),
                 claims.get("username", String.class),
                 claims.get("role", UserRole.class),
                 claims.get("type", TokenType.class),

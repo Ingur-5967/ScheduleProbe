@@ -6,6 +6,12 @@ import java.util.List;
 
 public interface LessonRepository {
 
+    Lesson create(Lesson lesson);
+
+    List<Lesson> createAll(List<Lesson> lessons);
+
+    void deleteLessonsInDaysOfWeek(List<Integer> days);
+
     List<Lesson> findAllLessonByGroupId(Long groupId);
 
     List<String> findAllRoomIdByGroupId(Long groupId);

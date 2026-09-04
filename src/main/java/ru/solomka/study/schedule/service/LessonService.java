@@ -24,6 +24,25 @@ public class LessonService implements LessonRepository {
     }
 
     @Override
+    public Lesson create(Lesson lesson) {
+        LessonJpaEntity lessonJpaEntity = mapper.mapToInfra(lesson);
+        return mapper.mapToDomain(lessonJpaRepository.save(lessonJpaEntity));
+    }
+
+    @Override
+    public List<Lesson> createAll(List<Lesson> lessons) {
+        List<LessonJpaEntity> lessonJpaEntities = lessons.stream().map(mapper::mapToInfra).toList();
+        return lessonJpaRepository.saveAll(lessonJpaEntities).stream()
+                .map(mapper::mapToDomain)
+                .toList();
+    }
+
+    @Override
+    public void deleteLessonsInDaysOfWeek(List<Integer> days) {
+        lessonJpaRepository.deleteLessonsInDaysOfWeek(days);
+    }
+
+    @Override
     public List<Lesson> findAllLessonByGroupId(Long groupId) {
         return lessonJpaRepository.findAllLessonByGroupId(groupId).stream()
                 .map(mapper::mapToDomain)

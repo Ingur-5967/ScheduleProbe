@@ -7,5 +7,15 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record User(@JsonIgnore @NonNull UUID id, @NonNull String username,
-                   @JsonIgnore @NonNull String passwordHash,
-                   @NonNull UserRole role, @NonNull Instant createdAt) {}
+                   @JsonIgnore String passwordHash,
+                   @NonNull UserRole role, Instant createdAt) {
+
+    public User(UUID id, String username, UserRole role, Instant createdAt) {
+        this(id, username, null, role, createdAt);
+    }
+
+    public User(UUID id, String username, UserRole role) {
+        this(id, username, null, role, null);
+    }
+
+}

@@ -37,14 +37,15 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/class", produces = "application/json")
-    public ResponseEntity<List<ScheduleInfo>> getScheduleForGroup(@RequestParam("groupId") Long groupId) {
+    @StudentPreAuthorize
+    public ResponseEntity<List<ScheduleInfo>> getScheduleForGroup(@RequestParam(value = "groupId", required = false) Long groupId) {
         List<Lesson> lessons = lessonService.findAllLessonByGroupId(groupId);
         return ResponseEntity.ok(scheduleHelper.buildScheduleInfo(lessons));
     }
 
     @GetMapping(value = "/assessment", produces = "application/json")
     @StudentPreAuthorize
-    public ResponseEntity<List<Assessment>> getAllAssessmentForGroup(@RequestParam("groupId") String groupId,
+    public ResponseEntity<List<Assessment>> getAllAssessmentForGroup(@RequestParam(value = "groupId", required = false) String groupId,
                                                                      @RequestParam(value = "types", required = false) List<AssessmentType> types) {
         return ResponseEntity.ok(assessmentService.findAllAssessmentByGroupId(groupId, types));
     }

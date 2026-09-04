@@ -9,13 +9,10 @@ public class ScheduleUserDetailUserMapper implements Mapper<User, ScheduleUserDe
 
     @Override
     public User mapToDomain(ScheduleUserDetail infra) {
-        assert infra.getPassword() != null;
         return new User(
                 infra.getId(),
                 infra.getUsername(),
-                infra.getPassword(),
-                infra.getRole(),
-                infra.getCreatedAt()
+                infra.getRole()
         );
     }
 
@@ -24,9 +21,7 @@ public class ScheduleUserDetailUserMapper implements Mapper<User, ScheduleUserDe
         return ScheduleUserDetail.builder()
                 .id(domain.id())
                 .username(domain.username())
-                .password(domain.passwordHash())
                 .role(domain.role())
-                .createdAt(domain.createdAt())
                 .build();
     }
 }

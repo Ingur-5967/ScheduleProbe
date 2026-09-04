@@ -8,7 +8,9 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.solomka.study.schedule.model.mapper.Mapper;
 import ru.solomka.study.schedule.security.AuthenticationProvider;
+import ru.solomka.study.schedule.security.ScheduleUserDetail;
 import ru.solomka.study.schedule.security.jwt.TokenEntity;
 import ru.solomka.study.schedule.security.jwt.TokenExtractor;
 import ru.solomka.study.schedule.security.jwt.TokenValidator;
@@ -23,10 +25,14 @@ public class OnceHttpPerRequestFilter extends OncePerRequestFilter {
     TokenValidator tokenValidator;
     AuthenticationProvider authenticationProvider;
 
-    public OnceHttpPerRequestFilter(TokenExtractor tokenExtractor, TokenValidator tokenValidator, AuthenticationProvider authenticationProvider) {
+    Mapper<TokenEntity, ScheduleUserDetail> mapper;
+
+    public OnceHttpPerRequestFilter(TokenExtractor tokenExtractor, TokenValidator tokenValidator,
+                                    AuthenticationProvider authenticationProvider, Mapper<TokenEntity, ScheduleUserDetail> mapper) {
         this.tokenExtractor = tokenExtractor;
         this.tokenValidator = tokenValidator;
         this.authenticationProvider = authenticationProvider;
+        this.mapper = mapper;
     }
 
     @Override
@@ -46,7 +52,7 @@ public class OnceHttpPerRequestFilter extends OncePerRequestFilter {
         }
 
         TokenEntity tokenEntity = tokenExtractor.extract(token);
-        authenticationProvider.authenticate(tokenEntity);
+        authenticationProvider.authenticate(mapper.mapToInfra(tokenEntity));
 
         filterChain.doFilter(request, response);
     }
