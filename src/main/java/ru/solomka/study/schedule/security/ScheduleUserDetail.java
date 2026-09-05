@@ -12,7 +12,6 @@ import ru.solomka.study.schedule.api.model.security.UserRole;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -20,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScheduleUserDetail implements UserDetails {
 
-    private UUID id;
+    private Long id;
     private String username;
     private UserRole role;
 

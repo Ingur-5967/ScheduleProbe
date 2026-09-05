@@ -1,7 +1,7 @@
 package ru.solomka.study.schedule.model.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.Lesson;
+import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.model.LessonJpaEntity;
 
 @Component
@@ -10,9 +10,10 @@ public class LessonJpaEntityLessonMapper implements Mapper<Lesson, LessonJpaEnti
     @Override
     public Lesson mapToDomain(LessonJpaEntity infra) {
         return new Lesson(
+                infra.getId(),
                 infra.getName(),
                 infra.getType(),
-                infra.getTeacherName(),
+                infra.getTeacherId(),
                 infra.getRoomId(),
                 infra.getGroupId(),
                 infra.getDayOfWeek(),
@@ -25,9 +26,10 @@ public class LessonJpaEntityLessonMapper implements Mapper<Lesson, LessonJpaEnti
     @Override
     public LessonJpaEntity mapToInfra(Lesson domain) {
         return LessonJpaEntity.builder()
+                .id(domain.id())
                 .name(domain.name())
                 .type(domain.type())
-                .teacherName(domain.teacherName())
+                .teacherId(domain.teacherId())
                 .roomId(domain.roomId())
                 .groupId(domain.groupId())
                 .dayOfWeek(domain.dayOfWeek())

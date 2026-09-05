@@ -40,12 +40,12 @@ public class SecurityService {
     }
 
     public TokenPair login(String login, String password) {
-        if(credentialsValidator.containsInUsernameForbiddenSymbols(login))
+        if (credentialsValidator.containsInUsernameForbiddenSymbols(login))
             throw new CredentialValidationException("Username contains forbidden symbols");
 
         User user = userService.getByUsername(login);
 
-        if(!passwordEncoder.matches(password, user.passwordHash()))
+        if (!passwordEncoder.matches(password, user.passwordHash()))
             throw new AuthenticationException("Incorrect credentials");
 
         String accessToken = tokenFactory.generateToken(
@@ -66,7 +66,7 @@ public class SecurityService {
     public User registration(String login, String password, AuthenticationType authenticationType) {
         credentialsValidator.validateCredentials(login, password, authenticationType == AuthenticationType.EMAIL);
 
-        if(userService.existsByUsername(login))
+        if (userService.existsByUsername(login))
             throw new UserAlreadyExistsException("User with username '%s' already exists".formatted(login));
 
         return userService.create(new User(

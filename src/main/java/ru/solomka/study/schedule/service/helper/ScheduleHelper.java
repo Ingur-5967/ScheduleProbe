@@ -1,7 +1,7 @@
 package ru.solomka.study.schedule.service.helper;
 
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.Lesson;
+import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.ScheduleInfo;
 import ru.solomka.study.schedule.api.model.ScheduleItem;
 
@@ -20,9 +20,10 @@ public class ScheduleHelper {
     public List<Lesson> buildLessonByScheduleInfo(String groupId, List<ScheduleInfo> scheduleInfo) {
         return scheduleInfo.stream().flatMap(info -> info.dayScheduleDetail().stream().map(detail ->
                 new Lesson(
+                        detail.id(),
                         detail.lessonName(),
                         detail.lessonType(),
-                        detail.teacherName(),
+                        detail.teacherId(),
                         detail.roomId(),
                         groupId,
                         info.dayOfWeek(),
@@ -35,10 +36,11 @@ public class ScheduleHelper {
 
     private List<ScheduleItem> buildScheduleItem(List<Lesson> lessons) {
         return lessons.stream().map(lesson -> new ScheduleItem(
+                lesson.id(),
                 lesson.name(),
                 lesson.type(),
                 lesson.roomId(),
-                lesson.teacherName(),
+                lesson.teacherId(),
                 lesson.startTime(),
                 lesson.endTime()
         )).toList();

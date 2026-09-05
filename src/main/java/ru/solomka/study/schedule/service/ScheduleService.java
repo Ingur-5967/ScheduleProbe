@@ -4,10 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import ru.solomka.study.schedule.api.model.Lesson;
+import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.ScheduleInfo;
+import ru.solomka.study.schedule.api.model.security.UserRole;
 import ru.solomka.study.schedule.api.repository.LessonRepository;
 import ru.solomka.study.schedule.exception.BadRequestClientExceptiom;
+import ru.solomka.study.schedule.security.AuthenticationProvider;
+import ru.solomka.study.schedule.security.ScheduleUserDetail;
 import ru.solomka.study.schedule.service.helper.ScheduleHelper;
 
 import java.util.List;
@@ -18,30 +21,44 @@ public class ScheduleService {
 
     LessonRepository lessonRepository;
     ScheduleHelper scheduleHelper;
+    AuthenticationProvider authenticationProvider;
 
-    public ScheduleService(LessonRepository lessonRepository, ScheduleHelper scheduleHelper) {
+    public ScheduleService(LessonRepository lessonRepository, ScheduleHelper scheduleHelper, AuthenticationProvider authenticationProvider) {
         this.lessonRepository = lessonRepository;
         this.scheduleHelper = scheduleHelper;
+        this.authenticationProvider = authenticationProvider;
     }
 
     @Transactional
     public List<Lesson> updateAllScheduleForGroup(String groupId, List<ScheduleInfo> items) {
-        if(groupId.isEmpty())
+        ScheduleUserDetail userDetail = authenticationProvider.getCurrentAuthenticatedUser();
+
+        if (groupId == null || groupId.isEmpty()) {
             throw new BadRequestClientExceptiom("Empty groupId");
-
-        if(items.isEmpty())
+        }
+        if (items == null || items.isEmpty()) {
             throw new BadRequestClientExceptiom("Empty schedule info");
+        }
 
-        // Max counnt iter - 7
         List<Lesson> lessons = scheduleHelper.buildLessonByScheduleInfo(groupId, items);
 
-        lessonRepository.deleteLessonsInDaysOfWeek(
-                lessons.stream()
-                        .map(Lesson::dayOfWeek)
-                        .toList()
-        );
+        if (userDetail.getRole() == UserRole.TEACHER) {
+            Long currentTeacherId = userDetail.getId();
 
-        // Единой пачкой загрузка, так что все +- окей по скорости будет
+            boolean allLessonsBelongToTeacher = lessons.stream()
+                    .allMatch(lesson -> currentTeacherId.equals(lesson.teacherId()));
+
+            if (!allLessonsBelongToTeacher)
+                throw new BadRequestClientExceptiom("The teacher can only edit their own classes");
+        }
+
+        List<Integer> daysOfWeekToUpdate = lessons.stream()
+                .map(Lesson::dayOfWeek)
+                .distinct()
+                .toList();
+
+        lessonRepository.deleteLessonsInDaysOfWeek(daysOfWeekToUpdate);
+
         return lessonRepository.createAll(lessons);
     }
 }

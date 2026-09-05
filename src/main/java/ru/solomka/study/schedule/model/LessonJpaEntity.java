@@ -3,9 +3,7 @@ package ru.solomka.study.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.solomka.study.schedule.api.model.LessonType;
-
-import java.util.UUID;
+import ru.solomka.study.schedule.api.model.lesson.LessonType;
 
 @Entity
 @Table(name = "lessons")
@@ -33,8 +31,8 @@ public class LessonJpaEntity {
     @Enumerated(value = EnumType.STRING)
     LessonType type;
 
-    @Column(name = "teacher_name", nullable = false)
-    String teacherName;
+    @Column(name = "teacher_id", nullable = false)
+    Long teacherId;
 
     @Column(name = "room_id", nullable = false)
     String roomId;

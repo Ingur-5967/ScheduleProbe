@@ -19,14 +19,23 @@ import java.util.UUID;
 public class UserJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+    @SequenceGenerator(
+            name = "users_seq",
+            sequenceName = "users_id_seq",
+            allocationSize = 1
+    )
+    Long id;
 
     @Column(name = "username", nullable = false, unique = true)
     String username;
 
     @Column(name = "password_hash", nullable = false)
     String passwordHash;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "additional_info_id", foreignKey = @ForeignKey(name = "fk_user_additional_info"))
+    UserAdditionalInfoJpaEntity additionalInfo;
 
     @Column(name = "role", nullable = false)
     @Enumerated(value = EnumType.STRING)
