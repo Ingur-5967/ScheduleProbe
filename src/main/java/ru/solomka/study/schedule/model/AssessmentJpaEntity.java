@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.solomka.study.schedule.api.model.AssessmentType;
 
-import java.util.UUID;
+import java.time.Instant;
 
 @Entity
 @Table(name = "assessments")
@@ -43,8 +43,8 @@ public class AssessmentJpaEntity {
     String roomId;
 
     @Column(name = "start_time", nullable = false)
-    Long startTime;
+    Instant startTime;
 
     @Column(name = "end_time", nullable = false)
-    Long endTime;
+    Instant endTime;
 }

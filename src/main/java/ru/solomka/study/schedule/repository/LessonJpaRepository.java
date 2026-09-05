@@ -17,9 +17,13 @@ public interface LessonJpaRepository extends JpaRepository<LessonJpaEntity, UUID
     @Query("DELETE FROM LessonJpaEntity e WHERE e.dayOfWeek IN :days")
     void deleteLessonsInDaysOfWeek(@Param("days") List<Integer> days);
 
-    List<LessonJpaEntity> findAllLessonByGroupId(Long groupId);
+    List<LessonJpaEntity> findAllByTeacherIdAndGroupId(Long teacherId, String groupId);
 
-    List<String> findAllRoomIdByGroupId(Long groupId);
+    boolean existsByGroupIdAndTeacherId(String groupId, Long teacherId);
 
-    List<String> findAllTeacherNameByGroupId(Long groupId);
+    List<LessonJpaEntity> findAllLessonByGroupId(String groupId);
+
+    List<String> findAllRoomIdByGroupId(String groupId);
+
+    List<String> findAllTeacherNameByGroupId(String groupId);
 }

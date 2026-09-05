@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-@PreAuthorize("hasRole('GHOST')")
-public @interface GhostPreAuthorize {
+@PreAuthorize("hasRole('GUEST')")
+public @interface GuestPreAuthorize {
 }

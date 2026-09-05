@@ -1,9 +1,9 @@
 package ru.solomka.study.schedule.api.model;
 
 public enum AssessmentType {
-    CREDIT,
-    DIFF_CREDIT,
-    EXAM,
-    COURSE_WORK,
-    DIPLOMA_WORK
+    CREDIT, // Зачет
+    DIFF_CREDIT, // Дифф. Зачет
+    EXAM, // Экзамен
+    COURSE_WORK, // Курсовая работа
+    DIPLOMA_WORK // ВКР
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.solomka.study.schedule.api.model.security.User;
 import ru.solomka.study.schedule.api.repository.UserRepository;
+import ru.solomka.study.schedule.exception.UserNotFoundException;
 import ru.solomka.study.schedule.model.UserJpaEntity;
 import ru.solomka.study.schedule.model.mapper.Mapper;
 import ru.solomka.study.schedule.repository.UserJpaRepository;
@@ -26,7 +27,21 @@ public class UserService implements UserRepository {
 
     public User getByUsername(String username) {
         return this.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with username '%s' not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with username '%s' not found".formatted(username)));
+    }
+
+    public User getById(Long id) {
+        return this.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(id)));
+    }
+
+    public User getEnrichedUserAdditionInfo(User user) {
+        User fullUser = this.getByUsername(user.username());
+        return new User(
+                fullUser.username(),
+                fullUser.additionalInfo(),
+                fullUser.role(),
+                fullUser.createdAt());
     }
 
     @Override
@@ -39,6 +54,11 @@ public class UserService implements UserRepository {
     public Optional<User> findByUsername(String username) {
         return userJpaRepository.findByUsername(username)
                 .map(mapper::mapToDomain);
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userJpaRepository.findById(id).map(mapper::mapToDomain);
     }
 
     @Override

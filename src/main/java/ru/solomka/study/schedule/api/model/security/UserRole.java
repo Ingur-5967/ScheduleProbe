@@ -1,9 +1,10 @@
 package ru.solomka.study.schedule.api.model.security;
 
 public enum UserRole {
-    GHOST,
-    STUDENT,
-    TEACHER,
-    DEANERY,
-    OPERATOR
+    GUEST, // Гость
+    STUDENT, // Студент
+    TEACHER, // Преподаватель
+    OPERATOR, // Оператор
+    DEANERY // Декан
+
 }

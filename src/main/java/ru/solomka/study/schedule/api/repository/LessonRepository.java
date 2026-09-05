@@ -1,6 +1,6 @@
 package ru.solomka.study.schedule.api.repository;
 
-import ru.solomka.study.schedule.api.model.Lesson;
+import ru.solomka.study.schedule.api.model.lesson.Lesson;
 
 import java.util.List;
 
@@ -12,9 +12,13 @@ public interface LessonRepository {
 
     void deleteLessonsInDaysOfWeek(List<Integer> days);
 
-    List<Lesson> findAllLessonByGroupId(Long groupId);
+    boolean containsTeacherInSchedule(String groupId, Long teacherId);
 
-    List<String> findAllRoomIdByGroupId(Long groupId);
+    List<Lesson> findAllByTeacherIdAndGroupId(Long teacherId, String groupId);
 
-    List<String> findAllTeacherIdByGroupId(Long groupId);
+    List<Lesson> findAllLessonByGroupId(String groupId);
+
+    List<String> findAllRoomIdByGroupId(String groupId);
+
+    List<String> findAllTeacherIdByGroupId(String groupId);
 }
