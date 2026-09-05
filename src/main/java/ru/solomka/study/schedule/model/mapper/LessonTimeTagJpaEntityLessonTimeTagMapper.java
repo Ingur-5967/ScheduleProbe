@@ -19,7 +19,7 @@ public class LessonTimeTagJpaEntityLessonTimeTagMapper implements Mapper<LessonT
     @Override
     public LessonTimeTagJpaEntity mapToInfra(LessonTimeTag domain) {
         return LessonTimeTagJpaEntity.builder()
-                .id(domain.lessonId())
+                .id(domain.id())
                 .comment(domain.comment())
                 .expiredAt(domain.expiredAt())
                 .build();

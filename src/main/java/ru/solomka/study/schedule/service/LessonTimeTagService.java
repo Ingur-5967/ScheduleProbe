@@ -32,7 +32,7 @@ public class LessonTimeTagService implements LessonTimeTagRepository {
         if(timeTags.isEmpty())
             return Collections.emptyList();
 
-        int notUniqueTags = timeTags.stream().map(LessonTimeTag::lessonId).collect(Collectors.toSet()).size();
+        int notUniqueTags = timeTags.stream().map(LessonTimeTag::id).collect(Collectors.toSet()).size();
 
         if(notUniqueTags != timeTags.size())
             throw new BadRequestClientExceptiom("One element has 2 tags or more");

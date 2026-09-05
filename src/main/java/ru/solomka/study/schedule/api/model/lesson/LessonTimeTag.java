@@ -4,4 +4,4 @@ import lombok.NonNull;
 
 import java.time.Instant;
 
-public record LessonTimeTag(@NonNull Long lessonId, @NonNull String comment, @NonNull Instant expiredAt) {}
+public record LessonTimeTag(@NonNull Long id, @NonNull String comment, @NonNull Instant expiredAt) {}

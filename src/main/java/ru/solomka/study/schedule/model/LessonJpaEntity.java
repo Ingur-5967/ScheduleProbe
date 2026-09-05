@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.solomka.study.schedule.api.model.lesson.LessonType;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "lessons")
 @Getter
@@ -46,9 +48,13 @@ public class LessonJpaEntity {
     @Column(name = "is_upper_week")
     boolean isUpperWeek;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_lesson_time_tag"))
+    LessonTimeTagJpaEntity tag;
+
     @Column(name = "start_time", nullable = false)
-    Long startTime;
+    Instant startTime;
 
     @Column(name = "end_time", nullable = false)
-    Long endTime;
+    Instant endTime;
 }

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.ScheduleInfo;
 import ru.solomka.study.schedule.api.model.ScheduleItem;
-import ru.solomka.study.schedule.service.UserService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -41,6 +40,7 @@ public class ScheduleHelper {
                         groupId,
                         info.dayOfWeek(),
                         false,
+                        null, // todo: обогащение временными метками
                         detail.startTime(),
                         detail.endTime()
                 )

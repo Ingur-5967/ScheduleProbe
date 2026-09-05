@@ -33,8 +33,8 @@ CREATE TABLE assessments
     assessment_type VARCHAR(50) NOT NULL,
     group_id        VARCHAR(150) NOT NULL,
     room_id         VARCHAR(100) NOT NULL,
-    start_time      BIGINT NOT NULL,
-    end_time        BIGINT NOT NULL
+    start_time      TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time        TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE refresh_tokens
