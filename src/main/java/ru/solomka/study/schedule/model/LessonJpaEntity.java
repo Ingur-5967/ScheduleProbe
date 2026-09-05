@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.solomka.study.schedule.api.model.lesson.LessonType;
 
-import java.time.Instant;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "lessons")
@@ -53,8 +53,8 @@ public class LessonJpaEntity {
     LessonTimeTagJpaEntity tag;
 
     @Column(name = "start_time", nullable = false)
-    Instant startTime;
+    LocalTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    Instant endTime;
+    LocalTime endTime;
 }

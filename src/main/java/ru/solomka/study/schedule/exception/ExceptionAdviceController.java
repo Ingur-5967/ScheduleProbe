@@ -53,9 +53,9 @@ public class ExceptionAdviceController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(detail);
     }
 
-    @ExceptionHandler(value = BadRequestClientExceptiom.class)
-    public ResponseEntity<ExceptionDetail> exceptionAuthenticationDetail(BadRequestClientExceptiom badRequestClientExceptiom) {
-        ExceptionDetail detail = new ExceptionDetail(HttpStatus.BAD_REQUEST.value(), badRequestClientExceptiom.getMessage());
+    @ExceptionHandler(value = BadRequestClientException.class)
+    public ResponseEntity<ExceptionDetail> exceptionAuthenticationDetail(BadRequestClientException badRequestClientException) {
+        ExceptionDetail detail = new ExceptionDetail(HttpStatus.BAD_REQUEST.value(), badRequestClientException.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(detail);
     }
 }

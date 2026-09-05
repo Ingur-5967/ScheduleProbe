@@ -21,8 +21,8 @@ CREATE TABLE lessons
     group_id      VARCHAR(150) NOT NULL,
     day_of_week   INTEGER,
     is_upper_week BOOLEAN,
-    start_time    TIMESTAMP WITH TIME ZONE NOT NULL,
-    end_time      TIMESTAMP WITH TIME ZONE NOT NULL
+    start_time    TIME NOT NULL,
+    end_time      TIME NOT NULL
 );
 
 CREATE TABLE assessments

@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import ru.solomka.study.schedule.api.model.lesson.LessonTimeTag;
 import ru.solomka.study.schedule.api.repository.LessonTimeTagRepository;
-import ru.solomka.study.schedule.exception.BadRequestClientExceptiom;
+import ru.solomka.study.schedule.exception.BadRequestClientException;
 import ru.solomka.study.schedule.model.LessonTimeTagJpaEntity;
 import ru.solomka.study.schedule.model.mapper.Mapper;
 import ru.solomka.study.schedule.repository.LessonTimeTagJpaRepository;
@@ -35,7 +35,7 @@ public class LessonTimeTagService implements LessonTimeTagRepository {
         int notUniqueTags = timeTags.stream().map(LessonTimeTag::id).collect(Collectors.toSet()).size();
 
         if(notUniqueTags != timeTags.size())
-            throw new BadRequestClientExceptiom("One element has 2 tags or more");
+            throw new BadRequestClientException("One element has 2 tags or more");
 
         return this.createAll(timeTags);
     }

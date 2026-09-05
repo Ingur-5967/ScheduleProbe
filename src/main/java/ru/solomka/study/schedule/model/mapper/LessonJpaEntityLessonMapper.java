@@ -21,6 +21,7 @@ public class LessonJpaEntityLessonMapper implements Mapper<Lesson, LessonJpaEnti
     @Override
     public Lesson mapToDomain(LessonJpaEntity infra) {
         return new Lesson(
+                infra.getId(),
                 infra.getName(),
                 infra.getType(),
                 infra.getTeacherId(),
@@ -37,6 +38,7 @@ public class LessonJpaEntityLessonMapper implements Mapper<Lesson, LessonJpaEnti
     @Override
     public LessonJpaEntity mapToInfra(Lesson domain) {
         return LessonJpaEntity.builder()
+                .id(domain.id())
                 .name(domain.name())
                 .type(domain.type())
                 .teacherId(domain.teacherId())

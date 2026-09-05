@@ -8,7 +8,7 @@ import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.ScheduleInfo;
 import ru.solomka.study.schedule.api.model.security.UserRole;
 import ru.solomka.study.schedule.api.repository.LessonRepository;
-import ru.solomka.study.schedule.exception.BadRequestClientExceptiom;
+import ru.solomka.study.schedule.exception.BadRequestClientException;
 import ru.solomka.study.schedule.security.AuthenticationProvider;
 import ru.solomka.study.schedule.security.ScheduleUserDetail;
 import ru.solomka.study.schedule.service.helper.ScheduleHelper;
@@ -34,10 +34,10 @@ public class ScheduleService {
         ScheduleUserDetail userDetail = authenticationProvider.getCurrentAuthenticatedUser();
 
         if (groupId == null || groupId.isEmpty()) {
-            throw new BadRequestClientExceptiom("Empty groupId");
+            throw new BadRequestClientException("Empty groupId");
         }
         if (items == null || items.isEmpty()) {
-            throw new BadRequestClientExceptiom("Empty schedule info");
+            throw new BadRequestClientException("Empty schedule info");
         }
 
         List<Lesson> lessons = scheduleHelper.buildLessonByScheduleInfo(groupId, items);
@@ -49,7 +49,7 @@ public class ScheduleService {
                     .allMatch(lesson -> currentTeacherId.equals(lesson.teacherId()));
 
             if (!allLessonsBelongToTeacher)
-                throw new BadRequestClientExceptiom("The teacher can only edit their own classes");
+                throw new BadRequestClientException("The teacher can only edit their own classes");
         }
 
         List<Integer> daysOfWeekToUpdate = lessons.stream()
