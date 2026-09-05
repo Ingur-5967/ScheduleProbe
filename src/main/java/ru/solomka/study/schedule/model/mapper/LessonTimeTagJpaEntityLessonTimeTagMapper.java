@@ -11,7 +11,7 @@ public class LessonTimeTagJpaEntityLessonTimeTagMapper implements Mapper<LessonT
     public LessonTimeTag mapToDomain(LessonTimeTagJpaEntity infra) {
         return new LessonTimeTag(
                 infra.getId(),
-                infra.getMessage(),
+                infra.getComment(),
                 infra.getExpiredAt()
         );
     }
@@ -20,7 +20,7 @@ public class LessonTimeTagJpaEntityLessonTimeTagMapper implements Mapper<LessonT
     public LessonTimeTagJpaEntity mapToInfra(LessonTimeTag domain) {
         return LessonTimeTagJpaEntity.builder()
                 .id(domain.lessonId())
-                .message(domain.message())
+                .comment(domain.comment())
                 .expiredAt(domain.expiredAt())
                 .build();
     }

@@ -19,8 +19,8 @@ public class LessonTimeTagJpaEntity {
     @Id
     Long id;
 
-    @Column(name = "message", nullable = false)
-    String message;
+    @Column(name = "comment", nullable = false)
+    String comment;
 
     @Column(name = "expired_at", nullable = false)
     Instant expiredAt;

@@ -70,7 +70,6 @@ public class SecurityService {
             throw new UserAlreadyExistsException("User with username '%s' already exists".formatted(login));
 
         return userService.create(new User(
-                UUID.randomUUID(),
                 login,
                 passwordEncoder.encode(password),
                 UserRole.GHOST,

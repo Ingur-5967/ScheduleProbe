@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.solomka.study.schedule.api.model.LevelEducation;
 
-
 @Entity
 @Table(name = "user_additional_info")
 @Getter

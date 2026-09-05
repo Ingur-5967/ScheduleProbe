@@ -37,9 +37,9 @@ public class SecurityGlobalConfiguration {
     @Bean
     SecurityFilterChain configurationHttpSecurity(HttpSecurity httpSecurity, OnceHttpPerRequestFilter onceHttpPerRequestFilter) {
         return httpSecurity.authorizeHttpRequests(request -> request
-                        .requestMatchers("/admin/**").hasAnyRole(UserRole.DEANERY.name(), UserRole.OPERATOR.name())
-                        .requestMatchers("/teacher/**").hasAnyRole(UserRole.TEACHER.name())
-                        .requestMatchers("/view/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAnyRole(UserRole.DEANERY.name(), UserRole.OPERATOR.name())
+                        .requestMatchers("/api/v1/teacher/**").hasAnyRole(UserRole.TEACHER.name())
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(onceHttpPerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)

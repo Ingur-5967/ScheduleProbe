@@ -34,7 +34,7 @@ public class UserJpaEntity {
     String passwordHash;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "additional_info_id", foreignKey = @ForeignKey(name = "fk_user_additional_info"))
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_user_additional_info"))
     UserAdditionalInfoJpaEntity additionalInfo;
 
     @Column(name = "role", nullable = false)

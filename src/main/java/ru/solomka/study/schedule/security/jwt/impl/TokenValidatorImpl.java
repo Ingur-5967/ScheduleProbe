@@ -1,5 +1,6 @@
 package ru.solomka.study.schedule.security.jwt.impl;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -23,16 +24,13 @@ public class TokenValidatorImpl implements TokenValidator {
 
     @Override
     public boolean validateToken(String token) {
-        TokenEntity tokenEntity;
         try {
-            tokenEntity = tokenExtractor.extract(token);
+            TokenEntity tokenEntity = tokenExtractor.extract(token);
+            return !tokenEntity.expiredAt().isBefore(Instant.now());
+        } catch (ExpiredJwtException e) {
+            return false;
         } catch (JwtException e) {
-            throw new TokenPayloadExtractException("Failed attempt extract token payload");
+            throw new TokenPayloadExtractException("Failed attempt to extract token payload: " + e.getMessage());
         }
-        return this.isAccessTokenExpired(tokenEntity.expiredAt());
-    }
-
-    private boolean isAccessTokenExpired(Instant tokenExpiration) {
-        return !tokenExpiration.isBefore(Instant.now());
     }
 }
