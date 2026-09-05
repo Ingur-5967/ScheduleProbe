@@ -3,9 +3,9 @@ package ru.solomka.study.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.solomka.study.schedule.api.model.LessonType;
+import ru.solomka.study.schedule.api.model.lesson.LessonType;
 
-import java.util.UUID;
+import java.time.Instant;
 
 @Entity
 @Table(name = "lessons")
@@ -33,8 +33,8 @@ public class LessonJpaEntity {
     @Enumerated(value = EnumType.STRING)
     LessonType type;
 
-    @Column(name = "teacher_name", nullable = false)
-    String teacherName;
+    @Column(name = "teacher_id", nullable = false)
+    Long teacherId;
 
     @Column(name = "room_id", nullable = false)
     String roomId;
@@ -48,9 +48,13 @@ public class LessonJpaEntity {
     @Column(name = "is_upper_week")
     boolean isUpperWeek;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_lesson_time_tag"))
+    LessonTimeTagJpaEntity tag;
+
     @Column(name = "start_time", nullable = false)
-    Long startTime;
+    Instant startTime;
 
     @Column(name = "end_time", nullable = false)
-    Long endTime;
+    Instant endTime;
 }

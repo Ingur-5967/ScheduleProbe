@@ -3,7 +3,7 @@ package ru.solomka.study.schedule.service;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import ru.solomka.study.schedule.api.model.Lesson;
+import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.repository.LessonRepository;
 import ru.solomka.study.schedule.model.LessonJpaEntity;
 import ru.solomka.study.schedule.model.mapper.Mapper;
@@ -43,19 +43,31 @@ public class LessonService implements LessonRepository {
     }
 
     @Override
-    public List<Lesson> findAllLessonByGroupId(Long groupId) {
+    public boolean containsTeacherInSchedule(String groupId, Long teacherId) {
+        return lessonJpaRepository.existsByGroupIdAndTeacherId(groupId, teacherId);
+    }
+
+    @Override
+    public List<Lesson> findAllByTeacherIdAndGroupId(Long teacherId, String groupId) {
+        return lessonJpaRepository.findAllByTeacherIdAndGroupId(teacherId, groupId).stream()
+                .map(mapper::mapToDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Lesson> findAllLessonByGroupId(String groupId) {
         return lessonJpaRepository.findAllLessonByGroupId(groupId).stream()
                 .map(mapper::mapToDomain)
                 .toList();
     }
 
     @Override
-    public List<String> findAllRoomIdByGroupId(Long groupId) {
+    public List<String> findAllRoomIdByGroupId(String groupId) {
         return lessonJpaRepository.findAllRoomIdByGroupId(groupId);
     }
 
     @Override
-    public List<String> findAllTeacherIdByGroupId(Long groupId) {
+    public List<String> findAllTeacherIdByGroupId(String groupId) {
         return lessonJpaRepository.findAllTeacherNameByGroupId(groupId);
     }
 }

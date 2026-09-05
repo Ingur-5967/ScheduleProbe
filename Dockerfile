@@ -12,7 +12,7 @@ RUN ./gradlew dependencies --no-daemon --info
 
 COPY src ./src
 
-RUN ./gradlew build -x test --no-daemon
+RUN ./gradlew build
 
 FROM eclipse-temurin:24-jre
 WORKDIR /app

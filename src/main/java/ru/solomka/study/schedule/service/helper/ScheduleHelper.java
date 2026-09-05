@@ -1,19 +1,32 @@
 package ru.solomka.study.schedule.service.helper;
 
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.Lesson;
+import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.ScheduleInfo;
 import ru.solomka.study.schedule.api.model.ScheduleItem;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ScheduleHelper {
 
     public List<ScheduleInfo> buildScheduleInfo(List<Lesson> lessons) {
-        List<ScheduleItem> scheduleItems = this.buildScheduleItem(lessons);
+        if (lessons == null || lessons.isEmpty()) {
+            return List.of();
+        }
+
         return lessons.stream()
-                .map(lesson -> new ScheduleInfo(lesson.dayOfWeek(), scheduleItems))
+                .collect(Collectors.groupingBy(Lesson::dayOfWeek))
+                .entrySet().stream()
+                .map(entry -> new ScheduleInfo(
+                        entry.getKey(),
+                        entry.getValue().stream()
+                                .map(this::mapLessonToScheduleItem)
+                                .toList()
+                ))
+                .sorted(Comparator.comparingInt(ScheduleInfo::dayOfWeek))
                 .toList();
     }
 
@@ -22,25 +35,26 @@ public class ScheduleHelper {
                 new Lesson(
                         detail.lessonName(),
                         detail.lessonType(),
-                        detail.teacherName(),
+                        detail.teacherId(),
                         detail.roomId(),
                         groupId,
                         info.dayOfWeek(),
                         false,
+                        null, // todo: обогащение временными метками
                         detail.startTime(),
                         detail.endTime()
                 )
         )).toList();
     }
 
-    private List<ScheduleItem> buildScheduleItem(List<Lesson> lessons) {
-        return lessons.stream().map(lesson -> new ScheduleItem(
+    private ScheduleItem mapLessonToScheduleItem(Lesson lesson) {
+        return new ScheduleItem(
                 lesson.name(),
                 lesson.type(),
                 lesson.roomId(),
-                lesson.teacherName(),
+                lesson.teacherId(),
                 lesson.startTime(),
                 lesson.endTime()
-        )).toList();
+        );
     }
 }

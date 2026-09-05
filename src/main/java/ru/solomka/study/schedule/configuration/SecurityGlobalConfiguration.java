@@ -37,9 +37,9 @@ public class SecurityGlobalConfiguration {
     @Bean
     SecurityFilterChain configurationHttpSecurity(HttpSecurity httpSecurity, OnceHttpPerRequestFilter onceHttpPerRequestFilter) {
         return httpSecurity.authorizeHttpRequests(request -> request
-                        .requestMatchers("/admin/**").hasAnyRole(UserRole.DEANERY.name(), UserRole.OPERATOR.name())
-                        .requestMatchers("/teacher/**").hasAnyRole(UserRole.TEACHER.name())
-                        .requestMatchers("/view/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAnyRole(UserRole.DEANERY.name(), UserRole.OPERATOR.name())
+                        .requestMatchers("/api/v1/teacher/**").hasAnyRole(UserRole.TEACHER.name())
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(onceHttpPerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -50,7 +50,7 @@ public class SecurityGlobalConfiguration {
     @Bean
     public RoleHierarchy roleHierarchy() {
         return RoleHierarchyImpl.fromHierarchy(
-                "ROLE_DECANT > ROLE_OPERATOR > ROLE_TEACHER > ROLE_STUDENT > ROLE_GHOST"
+                "ROLE_DECANT > ROLE_OPERATOR > ROLE_TEACHER > ROLE_STUDENT > ROLE_GUEST"
         );
     }
 }

@@ -12,25 +12,23 @@ import ru.solomka.study.schedule.model.mapper.Mapper;
 import ru.solomka.study.schedule.security.AuthenticationProvider;
 import ru.solomka.study.schedule.security.ScheduleUserDetail;
 import ru.solomka.study.schedule.security.jwt.TokenEntity;
-import ru.solomka.study.schedule.security.jwt.TokenExtractor;
-import ru.solomka.study.schedule.security.jwt.TokenValidator;
+import ru.solomka.study.schedule.security.jwt.TokenParser;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OnceHttpPerRequestFilter extends OncePerRequestFilter {
 
-    TokenExtractor tokenExtractor;
-    TokenValidator tokenValidator;
+    TokenParser tokenParser;
     AuthenticationProvider authenticationProvider;
 
     Mapper<TokenEntity, ScheduleUserDetail> mapper;
 
-    public OnceHttpPerRequestFilter(TokenExtractor tokenExtractor, TokenValidator tokenValidator,
-                                    AuthenticationProvider authenticationProvider, Mapper<TokenEntity, ScheduleUserDetail> mapper) {
-        this.tokenExtractor = tokenExtractor;
-        this.tokenValidator = tokenValidator;
+    public OnceHttpPerRequestFilter(TokenParser tokenParser, AuthenticationProvider authenticationProvider,
+                                    Mapper<TokenEntity, ScheduleUserDetail> mapper) {
+        this.tokenParser = tokenParser;
         this.authenticationProvider = authenticationProvider;
         this.mapper = mapper;
     }
@@ -44,16 +42,23 @@ public class OnceHttpPerRequestFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authHeader.substring(7).trim();
+        String tokenHeader = authHeader.substring(7).trim();
 
-        if(!tokenValidator.validateToken(token)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        Optional<TokenEntity> tokenEntity = tokenParser.parseAndValidateToken(tokenHeader);
 
-        TokenEntity tokenEntity = tokenExtractor.extract(token);
-        authenticationProvider.authenticate(mapper.mapToInfra(tokenEntity));
-
-        filterChain.doFilter(request, response);
+        tokenEntity.ifPresentOrElse(token -> {
+            authenticationProvider.authenticate(mapper.mapToInfra(token));
+            try {
+                filterChain.doFilter(request, response);
+            } catch (IOException | ServletException e) {
+                throw new RuntimeException(e);
+            }
+        }, () -> {
+            try {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

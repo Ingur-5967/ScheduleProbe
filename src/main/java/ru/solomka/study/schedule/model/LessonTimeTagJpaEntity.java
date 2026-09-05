@@ -1,30 +1,26 @@
 package ru.solomka.study.schedule.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
-@Table(name = "refresh_tokens")
+@Table(name = "lesson_timetags")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TokenJpaEntity {
+public class LessonTimeTagJpaEntity {
 
     @Id
-    UUID id;
+    Long id;
 
-    @Column(name = "refresh_token", nullable = false)
-    String refreshToken;
+    @Column(name = "comment", nullable = false)
+    String comment;
 
     @Column(name = "expired_at", nullable = false)
     Instant expiredAt;

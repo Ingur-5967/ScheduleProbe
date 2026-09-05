@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AuthenticationProviderImpl implements AuthenticationProvider {
@@ -23,6 +24,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     @Override
     public ScheduleUserDetail getCurrentAuthenticatedUser() {
-        return (ScheduleUserDetail) SecurityContextHolder.getContext().getAuthentication();
+        return (ScheduleUserDetail) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
     }
 }
