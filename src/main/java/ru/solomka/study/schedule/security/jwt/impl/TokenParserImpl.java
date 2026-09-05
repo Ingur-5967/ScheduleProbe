@@ -7,28 +7,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.solomka.study.schedule.api.model.security.UserRole;
+import ru.solomka.study.schedule.exception.TokenPayloadExtractException;
 import ru.solomka.study.schedule.security.jwt.TokenEntity;
-import ru.solomka.study.schedule.security.jwt.TokenExtractor;
+import ru.solomka.study.schedule.security.jwt.TokenParser;
 import ru.solomka.study.schedule.security.jwt.TokenType;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
-import java.util.UUID;
+import java.util.Optional;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class TokenExtractorImpl implements TokenExtractor {
+public class TokenParserImpl implements TokenParser {
 
     SecretKey secretKey;
+    Logger log = LoggerFactory.getLogger(TokenParserImpl.class);
 
-    Logger log = LoggerFactory.getLogger(TokenExtractorImpl.class);
-
-    public TokenExtractorImpl(SecretKey secretKey) {
+    public TokenParserImpl(SecretKey secretKey) {
         this.secretKey = secretKey;
     }
 
     @Override
-    public TokenEntity extract(String token) {
+    public Optional<TokenEntity> parseAndValidateToken(String token) {
+        try {
+            TokenEntity tokenEntity = this.extract(token);
+
+            if(tokenEntity.expiredAt().isBefore(Instant.now()))
+                return Optional.empty();
+
+            return Optional.of(tokenEntity);
+        } catch (ExpiredJwtException e) {
+            return Optional.empty();
+        } catch (JwtException e) {
+            throw new TokenPayloadExtractException("Failed attempt to extract token payload: " + e.getMessage());
+        }
+    }
+
+    private TokenEntity extract(String token) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(secretKey)

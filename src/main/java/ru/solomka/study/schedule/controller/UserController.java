@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.solomka.study.schedule.api.model.security.User;
 import ru.solomka.study.schedule.model.mapper.Mapper;
-import ru.solomka.study.schedule.security.AuthenticationProvider;
 import ru.solomka.study.schedule.security.ScheduleUserDetail;
-import ru.solomka.study.schedule.security.annotation.GhostPreAuthorize;
+import ru.solomka.study.schedule.security.annotation.GuestPreAuthorize;
 import ru.solomka.study.schedule.service.UserService;
 
 @RestController
@@ -28,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/me", produces = "application/json")
-    @GhostPreAuthorize
+    @GuestPreAuthorize
     public ResponseEntity<User> me(@AuthenticationPrincipal ScheduleUserDetail userDetail) {
         User mappedScheduledUser = mapper.mapToDomain(userDetail);
         User enrichedUser = userService.getEnrichedUserAdditionInfo(mappedScheduledUser);

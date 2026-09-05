@@ -72,7 +72,7 @@ public class SecurityService {
         return userService.create(new User(
                 login,
                 passwordEncoder.encode(password),
-                UserRole.GHOST,
+                UserRole.GUEST,
                 Instant.now()
         ));
     }

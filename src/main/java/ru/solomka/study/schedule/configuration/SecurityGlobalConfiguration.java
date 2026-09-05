@@ -50,7 +50,7 @@ public class SecurityGlobalConfiguration {
     @Bean
     public RoleHierarchy roleHierarchy() {
         return RoleHierarchyImpl.fromHierarchy(
-                "ROLE_DECANT > ROLE_OPERATOR > ROLE_TEACHER > ROLE_STUDENT > ROLE_GHOST"
+                "ROLE_DECANT > ROLE_OPERATOR > ROLE_TEACHER > ROLE_STUDENT > ROLE_GUEST"
         );
     }
 }
