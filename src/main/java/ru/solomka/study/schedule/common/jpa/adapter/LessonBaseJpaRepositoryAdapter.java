@@ -1,4 +1,4 @@
-package ru.solomka.study.schedule.repository.base.adapter;
+package ru.solomka.study.schedule.common.jpa.adapter;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +9,7 @@ import ru.solomka.study.schedule.exception.BadRequestClientException;
 import ru.solomka.study.schedule.model.LessonJpaEntity;
 import ru.solomka.study.schedule.model.mapper.Mapper;
 import ru.solomka.study.schedule.repository.LessonJpaRepository;
-import ru.solomka.study.schedule.repository.base.BaseJpaRepositoryAdapter;
+import ru.solomka.study.schedule.common.jpa.BaseJpaRepositoryAdapter;
 
 import java.util.List;
 

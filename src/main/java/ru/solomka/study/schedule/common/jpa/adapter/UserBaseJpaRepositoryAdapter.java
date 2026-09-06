@@ -1,7 +1,6 @@
-package ru.solomka.study.schedule.repository.base.adapter;
+package ru.solomka.study.schedule.common.jpa.adapter;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Repository;
 import ru.solomka.study.schedule.api.model.user.User;
@@ -10,7 +9,7 @@ import ru.solomka.study.schedule.exception.UserNotFoundException;
 import ru.solomka.study.schedule.model.UserJpaEntity;
 import ru.solomka.study.schedule.model.mapper.Mapper;
 import ru.solomka.study.schedule.repository.UserJpaRepository;
-import ru.solomka.study.schedule.repository.base.BaseJpaRepositoryAdapter;
+import ru.solomka.study.schedule.common.jpa.BaseJpaRepositoryAdapter;
 
 import java.util.Optional;
 
@@ -40,12 +39,6 @@ public class UserBaseJpaRepositoryAdapter extends BaseJpaRepositoryAdapter<User,
     public User getById(Long id) {
         return this.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(id)));
-    }
-
-    @Override
-    public User create(User user) {
-        UserJpaEntity userJpaEntity = mapper.mapToInfra(user);
-        return mapper.mapToDomain(userJpaRepository.save(userJpaEntity));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package ru.solomka.study.schedule.api.repository;
 
 import ru.solomka.study.schedule.api.model.user.User;
-import ru.solomka.study.schedule.repository.base.BaseRepository;
+import ru.solomka.study.schedule.common.jpa.BaseRepository;
 
 import java.util.Optional;
 

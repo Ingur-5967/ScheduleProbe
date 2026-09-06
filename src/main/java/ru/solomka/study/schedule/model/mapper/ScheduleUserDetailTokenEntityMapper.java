@@ -15,7 +15,7 @@ public class ScheduleUserDetailTokenEntityMapper implements Mapper<TokenEntity, 
     @Override
     public ScheduleUserDetail mapToInfra(TokenEntity domain) {
         return new ScheduleUserDetail(
-                domain.id(),
+                domain.userId(),
                 domain.username(),
                 domain.role()
         );

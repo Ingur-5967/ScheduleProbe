@@ -10,6 +10,7 @@ public class AssessmentJpaEntityAssessmentMapper implements Mapper<Assessment, A
     @Override
     public Assessment mapToDomain(AssessmentJpaEntity infra) {
         return new Assessment(
+                infra.getId(),
                 infra.getSubjectId(),
                 infra.getTeacherId(),
                 infra.getType(),
@@ -23,6 +24,7 @@ public class AssessmentJpaEntityAssessmentMapper implements Mapper<Assessment, A
     @Override
     public AssessmentJpaEntity mapToInfra(Assessment domain) {
         return AssessmentJpaEntity.builder()
+                .id(domain.id())
                 .subjectId(domain.subjectId())
                 .teacherId(domain.teacherId())
                 .type(domain.type())

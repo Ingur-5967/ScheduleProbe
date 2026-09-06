@@ -40,7 +40,8 @@ CREATE TABLE assessments
 CREATE TABLE refresh_tokens
 (
     id            UUID PRIMARY KEY,
-    refresh_token TEXT           NOT NULL,
+    user_id       BIGINT NOT NULL,
+    token         TEXT NOT NULL,
     expired_at    TIMESTAMP WITH TIME ZONE NOT NULL
 );
 

@@ -15,6 +15,7 @@ import ru.solomka.study.schedule.security.jwt.TokenType;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -52,7 +53,8 @@ public class TokenParserImpl implements TokenParser {
                     .getPayload();
 
             return new TokenEntity(
-                    claims.get("id", Long.class),
+                    UUID.fromString(claims.get("id", String.class)),
+                    claims.get("user_id", Long.class),
                     claims.get("username", String.class),
                     UserRole.valueOf(claims.get("role", String.class)),
                     TokenType.valueOf(claims.get("type", String.class)),

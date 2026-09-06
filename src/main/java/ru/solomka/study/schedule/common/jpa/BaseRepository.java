@@ -1,4 +1,4 @@
-package ru.solomka.study.schedule.repository.base;
+package ru.solomka.study.schedule.common.jpa;
 
 
 import java.util.List;

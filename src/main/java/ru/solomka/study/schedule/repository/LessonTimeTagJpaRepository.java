@@ -10,7 +10,6 @@ import ru.solomka.study.schedule.model.LessonTimeTagJpaEntity;
 @Repository
 public interface LessonTimeTagJpaRepository extends JpaRepository<LessonTimeTagJpaEntity, Long> {
 
-    @Transactional
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM LessonTimeTagJpaEntity lttje WHERE lttje.expiredAt < CURRENT_TIMESTAMP")
     int deleteAllExpiredLessonTimeTags();

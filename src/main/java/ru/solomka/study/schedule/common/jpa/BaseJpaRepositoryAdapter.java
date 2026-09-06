@@ -1,15 +1,13 @@
-package ru.solomka.study.schedule.repository.base;
+package ru.solomka.study.schedule.common.jpa;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.solomka.study.schedule.model.Identifiable;
+import ru.solomka.study.schedule.common.Identifiable;
+import ru.solomka.study.schedule.exception.EntityAlreadyExistsException;
 import ru.solomka.study.schedule.model.mapper.Mapper;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -17,18 +15,18 @@ import java.util.stream.Collectors;
  * Класс-адаптер для JPA-репозиториев
  *
  * @param <DOMAIN>  тип доменной модели
- * @param <ENTITY>  тип JPA-сущности, реализует Identifiable<ID>
+ * @param <INFRA>  тип JPA-сущности, реализует Identifiable<ID>
  * @param <ID>      тип идентификатора (например, Long)
  */
 @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
-public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, ID>
+public class BaseJpaRepositoryAdapter<DOMAIN extends Identifiable<ID>, INFRA extends Identifiable<ID>, ID>
         implements BaseRepository<DOMAIN, ID> {
 
-    JpaRepository<ENTITY, ID> repository;
-    Mapper<DOMAIN, ENTITY> mapper;
+    JpaRepository<INFRA, ID> repository;
+    Mapper<DOMAIN, INFRA> mapper;
 
-    protected BaseJpaRepositoryAdapter(JpaRepository<ENTITY, ID> repository,
-                                       Mapper<DOMAIN, ENTITY> mapper) {
+    protected BaseJpaRepositoryAdapter(JpaRepository<INFRA, ID> repository,
+                                       Mapper<DOMAIN, INFRA> mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -36,14 +34,33 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
     @Override
     public List<DOMAIN> createAll(List<DOMAIN> entities) {
         if (entities == null || entities.isEmpty()) {
-            return List.of();
+            return Collections.emptyList();
         }
 
-        List<ENTITY> infraEntities = entities.stream()
+        List<INFRA> infraEntities = entities.stream()
                 .map(mapper::mapToInfra)
                 .toList();
 
-        List<ENTITY> savedEntities = repository.saveAll(infraEntities);
+        List<ID> incomingIds = infraEntities.stream()
+                .map(Identifiable::getId)
+                .filter(Objects::nonNull)
+                .toList();
+
+        if (!incomingIds.isEmpty()) {
+            List<INFRA> existingEntities = repository.findAllById(incomingIds);
+
+            if (!existingEntities.isEmpty()) {
+                List<ID> conflictingIds = existingEntities.stream()
+                        .map(Identifiable::getId)
+                        .toList();
+
+                throw new EntityAlreadyExistsException(
+                        "Entities with the following IDs already exist in the database: %s".formatted(conflictingIds)
+                );
+            }
+        }
+
+        List<INFRA> savedEntities = repository.saveAll(infraEntities);
 
         return savedEntities.stream()
                 .map(mapper::mapToDomain)
@@ -52,35 +69,40 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
 
     @Override
     public DOMAIN create(DOMAIN entity) {
-        if (entity == null) {
+        if (entity == null)
             return null;
-        }
-        ENTITY infraEntity = mapper.mapToInfra(entity);
-        ENTITY saved = repository.save(infraEntity);
+
+        if(entity.getId() != null && this.existsById(entity.getId()))
+            throw new EntityAlreadyExistsException(
+                    "Entity with id '%s' already exists".formatted(entity.getId())
+            );
+
+        INFRA saved = repository.save(mapper.mapToInfra(entity));
         return mapper.mapToDomain(saved);
     }
 
     @Override
     public List<DOMAIN> updateAll(List<DOMAIN> entities) {
-        if (entities == null || entities.isEmpty()) {
+        if (entities == null || entities.isEmpty())
             return Collections.emptyList();
-        }
 
-        List<ENTITY> incomingInfra = entities.stream()
+        List<INFRA> incomingInfra = entities.stream()
                 .map(mapper::mapToInfra)
                 .toList();
 
         List<ID> ids = incomingInfra.stream().map(Identifiable::getId).toList();
-        List<ENTITY> existingInfra = repository.findAllById(ids);
+        List<INFRA> existingInfra = repository.findAllById(ids);
 
-        Map<ID, ENTITY> existingMap = existingInfra.stream()
+        Map<ID, INFRA> existingMap = existingInfra.stream()
                 .collect(Collectors.toMap(Identifiable::getId, Function.identity()));
 
-        List<ENTITY> toUpdate = incomingInfra.stream().filter(incoming -> {
-            ENTITY existing = existingMap.get(incoming.getId());
+        List<INFRA> toUpdate = incomingInfra.stream().filter(incoming -> {
+            INFRA existing = existingMap.get(incoming.getId());
 
             if (existing == null) {
-                throw new IllegalArgumentException("Object with id " + incoming.getId() + " not found in DB");
+                throw new IllegalArgumentException(
+                        "Object with id %s not found in DB".formatted(incoming.getId())
+                );
             }
 
             return !this.isIdentical(existing, incoming);
@@ -89,7 +111,7 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
         if (toUpdate.isEmpty())
             return Collections.emptyList();
 
-        List<ENTITY> savedInfra = repository.saveAll(toUpdate);
+        List<INFRA> savedInfra = repository.saveAll(toUpdate);
 
         return savedInfra.stream()
                 .map(mapper::mapToDomain)
@@ -98,11 +120,10 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
 
     @Override
     public DOMAIN update(DOMAIN entity) {
-        if (entity == null) {
+        if (entity == null)
             return null;
-        }
-        ENTITY infraEntity = mapper.mapToInfra(entity);
-        ENTITY saved = repository.save(infraEntity);
+
+        INFRA saved = repository.save(mapper.mapToInfra(entity));
         return mapper.mapToDomain(saved);
     }
 
@@ -111,7 +132,7 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
         if (entities == null || entities.isEmpty())
             return 0;
 
-        List<ENTITY> infraEntities = entities.stream()
+        List<INFRA> infraEntities = entities.stream()
                 .map(mapper::mapToInfra)
                 .toList();
         int size = infraEntities.size();
@@ -124,7 +145,7 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
         if (entity == null)
             return false;
 
-        ENTITY infraEntity = mapper.mapToInfra(entity);
+        INFRA infraEntity = mapper.mapToInfra(entity);
         repository.delete(infraEntity);
 
         return true;
@@ -158,7 +179,7 @@ public class BaseJpaRepositoryAdapter<DOMAIN, ENTITY extends Identifiable<ID>, I
                 .toList();
     }
 
-    protected boolean isIdentical(ENTITY existing, ENTITY incoming) {
+    protected boolean isIdentical(INFRA existing, INFRA incoming) {
         return existing.equals(incoming);
     }
 }

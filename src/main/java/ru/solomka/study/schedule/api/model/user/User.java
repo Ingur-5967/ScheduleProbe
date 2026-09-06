@@ -2,12 +2,13 @@ package ru.solomka.study.schedule.api.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NonNull;
+import ru.solomka.study.schedule.common.Identifiable;
 
 import java.time.Instant;
 
 public record User(@JsonIgnore Long id, @NonNull String username,
                    @JsonIgnore String passwordHash, UserAdditionalInfo additionalInfo,
-                   @NonNull UserRole role, Instant createdAt) {
+                   @NonNull UserRole role, Instant createdAt) implements Identifiable<Long> {
 
     public User(Long id, String username, UserAdditionalInfo additionalInfo, UserRole role, Instant createdAt) {
         this(id, username, null, additionalInfo, role, createdAt);
@@ -35,5 +36,10 @@ public record User(@JsonIgnore Long id, @NonNull String username,
 
     public User(Long id, String username, String passwordHash, UserRole role, Instant createdAt) {
         this(id, username, passwordHash, null, role, createdAt);
+    }
+
+    @Override
+    public Long getId() {
+        return this.id;
     }
 }

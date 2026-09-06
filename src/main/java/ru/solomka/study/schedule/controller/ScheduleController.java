@@ -11,6 +11,7 @@ import ru.solomka.study.schedule.api.model.assessment.Assessment;
 import ru.solomka.study.schedule.api.model.assessment.AssessmentType;
 import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.lesson.ScheduleInfo;
+import ru.solomka.study.schedule.security.annotation.GuestPreAuthorize;
 import ru.solomka.study.schedule.security.annotation.StudentPreAuthorize;
 import ru.solomka.study.schedule.service.AssessmentService;
 import ru.solomka.study.schedule.service.LessonService;
@@ -36,7 +37,7 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/class", produces = "application/json")
-    @StudentPreAuthorize
+    @GuestPreAuthorize
     public ResponseEntity<List<ScheduleInfo>> getScheduleForGroup(@RequestParam(value = "groupId", required = false) String groupId) {
         List<Lesson> lessons = lessonService.findAllLessonByGroupId(groupId);
         return ResponseEntity.ok(scheduleHelper.buildScheduleInfo(lessons));

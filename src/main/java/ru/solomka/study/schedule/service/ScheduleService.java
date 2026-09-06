@@ -50,7 +50,7 @@ public class ScheduleService {
             Long currentTeacherId = userDetail.getId();
 
             if (lessons.stream().anyMatch(lesson -> lesson.id() == null)) {
-                throw new BadRequestClientException("Teacher can only edit existing classes (id is required for all items)");
+                throw new BadRequestClientException("The teacher can only edit existing classes (id is required for all items)");
             }
             if (!lessons.stream().allMatch(lesson -> currentTeacherId.equals(lesson.teacherId()))) {
                 throw new BadRequestClientException("The teacher can only edit their own classes");

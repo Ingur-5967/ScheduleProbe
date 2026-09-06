@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.solomka.study.schedule.api.model.user.UserRole;
+import ru.solomka.study.schedule.common.Identifiable;
 
 import java.time.Instant;
 
