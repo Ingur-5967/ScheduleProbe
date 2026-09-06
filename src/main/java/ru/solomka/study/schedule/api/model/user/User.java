@@ -1,11 +1,9 @@
-package ru.solomka.study.schedule.api.model.security;
+package ru.solomka.study.schedule.api.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NonNull;
-import ru.solomka.study.schedule.api.model.UserAdditionalInfo;
 
 import java.time.Instant;
-import java.util.UUID;
 
 public record User(@JsonIgnore Long id, @NonNull String username,
                    @JsonIgnore String passwordHash, UserAdditionalInfo additionalInfo,

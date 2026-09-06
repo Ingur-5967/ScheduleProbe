@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.security.UserRole;
+import ru.solomka.study.schedule.api.model.user.UserRole;
 import ru.solomka.study.schedule.exception.TokenPayloadExtractException;
 import ru.solomka.study.schedule.security.jwt.TokenEntity;
 import ru.solomka.study.schedule.security.jwt.TokenParser;

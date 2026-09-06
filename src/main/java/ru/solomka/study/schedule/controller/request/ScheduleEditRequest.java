@@ -1,6 +1,6 @@
 package ru.solomka.study.schedule.controller.request;
 
-import ru.solomka.study.schedule.api.model.ScheduleInfo;
+import ru.solomka.study.schedule.api.model.lesson.ScheduleInfo;
 
 import java.util.List;
 

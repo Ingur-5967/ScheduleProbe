@@ -1,14 +1,9 @@
 package ru.solomka.study.schedule.api.repository;
 
 import ru.solomka.study.schedule.api.model.lesson.LessonTimeTag;
+import ru.solomka.study.schedule.repository.base.BaseRepository;
 
-import java.util.List;
+public interface LessonTimeTagRepository extends BaseRepository<LessonTimeTag, Long> {
 
-public interface LessonTimeTagRepository {
-
-    LessonTimeTag create(LessonTimeTag LessonTimeTag);
-
-    List<LessonTimeTag> createAll(List<LessonTimeTag> lessonTimeTags);
-
-    void deleteAllExpiredLessonTimeTags();
+    int deleteAllExpiredLessonTimeTags();
 }

@@ -1,7 +1,7 @@
 package ru.solomka.study.schedule.model.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.UserAdditionalInfo;
+import ru.solomka.study.schedule.api.model.user.UserAdditionalInfo;
 import ru.solomka.study.schedule.model.UserAdditionalInfoJpaEntity;
 
 @Component

@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.solomka.study.schedule.api.model.Assessment;
-import ru.solomka.study.schedule.api.model.AssessmentType;
+import ru.solomka.study.schedule.api.model.assessment.Assessment;
+import ru.solomka.study.schedule.api.model.assessment.AssessmentType;
 import ru.solomka.study.schedule.api.model.lesson.Lesson;
-import ru.solomka.study.schedule.api.model.ScheduleInfo;
+import ru.solomka.study.schedule.api.model.lesson.ScheduleInfo;
 import ru.solomka.study.schedule.security.annotation.StudentPreAuthorize;
 import ru.solomka.study.schedule.service.AssessmentService;
 import ru.solomka.study.schedule.service.LessonService;
@@ -24,9 +24,9 @@ import java.util.List;
 public class ScheduleController {
 
     LessonService lessonService;
-    ScheduleHelper scheduleHelper;
+    AssessmentService assessmentService;
 
-    private final AssessmentService assessmentService;
+    ScheduleHelper scheduleHelper;
 
     public ScheduleController(LessonService lessonService, ScheduleHelper scheduleHelper,
                               AssessmentService assessmentService) {

@@ -4,7 +4,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.security.User;
+import ru.solomka.study.schedule.api.model.user.User;
 import ru.solomka.study.schedule.security.jwt.TokenFactory;
 import ru.solomka.study.schedule.security.jwt.TokenType;
 

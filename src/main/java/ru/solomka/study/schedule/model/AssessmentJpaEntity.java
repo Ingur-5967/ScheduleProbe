@@ -3,7 +3,7 @@ package ru.solomka.study.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.solomka.study.schedule.api.model.AssessmentType;
+import ru.solomka.study.schedule.api.model.assessment.AssessmentType;
 
 import java.time.Instant;
 
@@ -15,7 +15,7 @@ import java.time.Instant;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AssessmentJpaEntity {
+public class AssessmentJpaEntity implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessons_seq")

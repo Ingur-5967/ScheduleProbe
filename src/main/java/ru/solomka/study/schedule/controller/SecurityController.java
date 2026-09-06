@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.solomka.study.schedule.api.model.security.User;
+import ru.solomka.study.schedule.api.model.user.User;
 import ru.solomka.study.schedule.controller.request.AuthenticationRequest;
 import ru.solomka.study.schedule.security.AuthenticationType;
 import ru.solomka.study.schedule.security.jwt.TokenPair;

@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RefreshTokenJpaEntity {
+public class RefreshTokenJpaEntity implements Identifiable<UUID> {
 
     @Id
     UUID id;

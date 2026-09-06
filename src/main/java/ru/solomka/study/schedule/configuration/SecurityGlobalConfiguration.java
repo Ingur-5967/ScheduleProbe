@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.solomka.study.schedule.api.model.security.UserRole;
+import ru.solomka.study.schedule.api.model.user.UserRole;
 import ru.solomka.study.schedule.security.filter.OnceHttpPerRequestFilter;
 
 @Configuration

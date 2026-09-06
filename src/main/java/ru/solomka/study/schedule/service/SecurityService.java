@@ -4,8 +4,9 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.solomka.study.schedule.api.model.security.User;
-import ru.solomka.study.schedule.api.model.security.UserRole;
+import ru.solomka.study.schedule.api.model.user.User;
+import ru.solomka.study.schedule.api.model.user.UserRole;
+import ru.solomka.study.schedule.api.repository.UserRepository;
 import ru.solomka.study.schedule.configuration.TokenConfigurationProperties;
 import ru.solomka.study.schedule.exception.AuthenticationException;
 import ru.solomka.study.schedule.exception.CredentialValidationException;
@@ -17,23 +18,22 @@ import ru.solomka.study.schedule.security.jwt.TokenType;
 import ru.solomka.study.schedule.utils.CredentialsValidator;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityService {
 
     TokenFactory tokenFactory;
-    UserService userService;
+    UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     CredentialsValidator credentialsValidator;
     TokenConfigurationProperties tokenConfigurationProperties;
 
-    public SecurityService(TokenFactory tokenFactory, UserService userService,
+    public SecurityService(TokenFactory tokenFactory, UserRepository userRepository,
                            PasswordEncoder passwordEncoder, CredentialsValidator credentialsValidator,
                            TokenConfigurationProperties tokenConfigurationProperties) {
         this.tokenFactory = tokenFactory;
-        this.userService = userService;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.credentialsValidator = credentialsValidator;
         this.tokenConfigurationProperties = tokenConfigurationProperties;
@@ -43,7 +43,7 @@ public class SecurityService {
         if (credentialsValidator.containsInUsernameForbiddenSymbols(login))
             throw new CredentialValidationException("Username contains forbidden symbols");
 
-        User user = userService.getByUsername(login);
+        User user = userRepository.getByUsername(login);
 
         if (!passwordEncoder.matches(password, user.passwordHash()))
             throw new AuthenticationException("Incorrect credentials");
@@ -66,10 +66,10 @@ public class SecurityService {
     public User registration(String login, String password, AuthenticationType authenticationType) {
         credentialsValidator.validateCredentials(login, password, authenticationType == AuthenticationType.EMAIL);
 
-        if (userService.existsByUsername(login))
+        if (userRepository.existsByUsername(login))
             throw new UserAlreadyExistsException("User with username '%s' already exists".formatted(login));
 
-        return userService.create(new User(
+        return userRepository.create(new User(
                 login,
                 passwordEncoder.encode(password),
                 UserRole.GUEST,

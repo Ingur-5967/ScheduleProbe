@@ -2,67 +2,43 @@ package ru.solomka.study.schedule.service;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.solomka.study.schedule.api.model.security.User;
+import ru.solomka.study.schedule.api.model.user.User;
 import ru.solomka.study.schedule.api.repository.UserRepository;
-import ru.solomka.study.schedule.exception.UserNotFoundException;
-import ru.solomka.study.schedule.model.UserJpaEntity;
-import ru.solomka.study.schedule.model.mapper.Mapper;
-import ru.solomka.study.schedule.repository.UserJpaRepository;
 
 import java.util.Optional;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class UserService implements UserRepository {
+public class UserService {
 
-    UserJpaRepository userJpaRepository;
-    Mapper<User, UserJpaEntity> mapper;
+    UserRepository userRepository;
 
-    public UserService(UserJpaRepository userJpaRepository, Mapper<User, UserJpaEntity> mapper) {
-        this.userJpaRepository = userJpaRepository;
-        this.mapper = mapper;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public User getByUsername(String username) {
-        return this.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User with username '%s' not found".formatted(username)));
+        return userRepository.getByUsername(username);
     }
 
     public User getById(Long id) {
-        return this.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id '%s' not found".formatted(id)));
+        return userRepository.getById(id);
     }
 
-    public User getEnrichedUserAdditionInfo(User user) {
-        User fullUser = this.getByUsername(user.username());
-        return new User(
-                fullUser.username(),
-                fullUser.additionalInfo(),
-                fullUser.role(),
-                fullUser.createdAt());
-    }
-
-    @Override
     public User create(User user) {
-       UserJpaEntity userJpaEntity = mapper.mapToInfra(user);
-       return mapper.mapToDomain(userJpaRepository.save(userJpaEntity));
+        return userRepository.create(user);
     }
 
-    @Override
     public Optional<User> findByUsername(String username) {
-        return userJpaRepository.findByUsername(username)
-                .map(mapper::mapToDomain);
+        return userRepository.findByUsername(username);
     }
 
-    @Override
     public Optional<User> findById(Long id) {
-        return userJpaRepository.findById(id).map(mapper::mapToDomain);
+        return userRepository.findById(id);
     }
 
-    @Override
     public boolean existsByUsername(String username) {
-        return userJpaRepository.existsByUsername(username);
+        return userRepository.existsByUsername(username);
     }
 }

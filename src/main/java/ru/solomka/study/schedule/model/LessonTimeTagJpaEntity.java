@@ -14,7 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonTimeTagJpaEntity {
+public class LessonTimeTagJpaEntity implements Identifiable<Long> {
 
     @Id
     Long id;

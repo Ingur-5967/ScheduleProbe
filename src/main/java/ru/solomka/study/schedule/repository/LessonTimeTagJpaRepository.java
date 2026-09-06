@@ -13,5 +13,5 @@ public interface LessonTimeTagJpaRepository extends JpaRepository<LessonTimeTagJ
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM LessonTimeTagJpaEntity lttje WHERE lttje.expiredAt < CURRENT_TIMESTAMP")
-    void deleteAllExpiredLessonTimeTags();
+    int deleteAllExpiredLessonTimeTags();
 }

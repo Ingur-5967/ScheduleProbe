@@ -15,7 +15,7 @@ import java.time.LocalTime;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonJpaEntity {
+public class LessonJpaEntity implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessons_seq")

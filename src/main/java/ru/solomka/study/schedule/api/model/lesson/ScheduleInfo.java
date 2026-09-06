@@ -1,4 +1,4 @@
-package ru.solomka.study.schedule.api.model;
+package ru.solomka.study.schedule.api.model.lesson;
 
 import lombok.NonNull;
 
