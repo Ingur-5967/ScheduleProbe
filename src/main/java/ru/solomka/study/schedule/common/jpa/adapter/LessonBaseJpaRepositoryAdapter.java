@@ -28,14 +28,6 @@ public class LessonBaseJpaRepositoryAdapter extends BaseJpaRepositoryAdapter<Les
     }
 
     @Override
-    public List<Lesson> updateAll(List<Lesson> lessons) {
-        if(!lessons.stream().allMatch(lesson -> lesson.id() != null && lessonJpaRepository.existsById(lesson.id())))
-            throw new BadRequestClientException("The object lesson for update must contain field 'id'");
-
-        return super.updateAll(lessons);
-    }
-
-    @Override
     public List<Lesson> findByGroupIdAndDayOfWeekIn(String groupId, List<Integer> daysOfWeek) {
         return lessonJpaRepository.findByGroupIdAndDayOfWeekIn(groupId, daysOfWeek).stream()
                 .map(mapper::mapToDomain)
