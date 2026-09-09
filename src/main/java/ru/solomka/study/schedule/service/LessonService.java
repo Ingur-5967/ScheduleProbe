@@ -5,69 +5,48 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.repository.LessonRepository;
-import ru.solomka.study.schedule.model.LessonJpaEntity;
-import ru.solomka.study.schedule.model.mapper.Mapper;
-import ru.solomka.study.schedule.repository.LessonJpaRepository;
 
 import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class LessonService implements LessonRepository {
+public class LessonService {
 
-    LessonJpaRepository lessonJpaRepository;
-    Mapper<Lesson, LessonJpaEntity> mapper;
+    LessonRepository lessonRepository;
 
-    public LessonService(LessonJpaRepository lessonJpaRepository, Mapper<Lesson, LessonJpaEntity> mapper) {
-        this.lessonJpaRepository = lessonJpaRepository;
-        this.mapper = mapper;
+    public LessonService(LessonRepository lessonRepository) {
+        this.lessonRepository = lessonRepository;
     }
 
-    @Override
-    public Lesson create(Lesson lesson) {
-        LessonJpaEntity lessonJpaEntity = mapper.mapToInfra(lesson);
-        return mapper.mapToDomain(lessonJpaRepository.save(lessonJpaEntity));
+    public List<Lesson> updateAll(List<Lesson> lessons) {
+        return lessonRepository.updateAll(lessons);
     }
 
-    @Override
-    public List<Lesson> createAll(List<Lesson> lessons) {
-        List<LessonJpaEntity> lessonJpaEntities = lessons.stream().map(mapper::mapToInfra).toList();
-        return lessonJpaRepository.saveAll(lessonJpaEntities).stream()
-                .map(mapper::mapToDomain)
-                .toList();
+    public List<Lesson> findByGroupIdAndDayOfWeekIn(String groupId, List<Integer> daysOfWeek) {
+        return lessonRepository.findByGroupIdAndDayOfWeekIn(groupId, daysOfWeek);
     }
 
-    @Override
-    public void deleteLessonsInDaysOfWeek(List<Integer> days) {
-        lessonJpaRepository.deleteLessonsInDaysOfWeek(days);
+    public void deleteLessonsInDaysOfWeekExcludingIds(String groupId, List<Integer> days, List<Long> excludeIds) {
+        lessonRepository.deleteLessonsInDaysOfWeekExcludingIds(groupId, days, excludeIds);
     }
 
-    @Override
     public boolean containsTeacherInSchedule(String groupId, Long teacherId) {
-        return lessonJpaRepository.existsByGroupIdAndTeacherId(groupId, teacherId);
+        return lessonRepository.containsTeacherInSchedule(groupId, teacherId);
     }
 
-    @Override
     public List<Lesson> findAllByTeacherIdAndGroupId(Long teacherId, String groupId) {
-        return lessonJpaRepository.findAllByTeacherIdAndGroupId(teacherId, groupId).stream()
-                .map(mapper::mapToDomain)
-                .toList();
+        return lessonRepository.findAllByTeacherIdAndGroupId(teacherId, groupId);
     }
 
-    @Override
     public List<Lesson> findAllLessonByGroupId(String groupId) {
-        return lessonJpaRepository.findAllLessonByGroupId(groupId).stream()
-                .map(mapper::mapToDomain)
-                .toList();
+        return lessonRepository.findAllLessonByGroupId(groupId);
     }
 
-    @Override
     public List<String> findAllRoomIdByGroupId(String groupId) {
-        return lessonJpaRepository.findAllRoomIdByGroupId(groupId);
+        return lessonRepository.findAllRoomIdByGroupId(groupId);
     }
 
-    @Override
     public List<String> findAllTeacherIdByGroupId(String groupId) {
-        return lessonJpaRepository.findAllTeacherNameByGroupId(groupId);
+        return lessonRepository.findAllTeacherIdByGroupId(groupId);
     }
 }

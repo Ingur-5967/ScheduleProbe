@@ -1,4 +1,4 @@
-package ru.solomka.study.schedule.api.model.security;
+package ru.solomka.study.schedule.api.model.user;
 
 public enum UserRole {
     GUEST, // Гость

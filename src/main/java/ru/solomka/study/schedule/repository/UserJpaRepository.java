@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.solomka.study.schedule.model.UserJpaEntity;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserJpaEntity, Long> {

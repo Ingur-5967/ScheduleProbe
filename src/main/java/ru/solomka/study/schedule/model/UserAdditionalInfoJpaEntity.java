@@ -3,7 +3,8 @@ package ru.solomka.study.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.solomka.study.schedule.api.model.LevelEducation;
+import ru.solomka.study.schedule.api.model.user.LevelEducation;
+import ru.solomka.study.schedule.common.Identifiable;
 
 @Entity
 @Table(name = "user_additional_info")
@@ -13,7 +14,7 @@ import ru.solomka.study.schedule.api.model.LevelEducation;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserAdditionalInfoJpaEntity {
+public class UserAdditionalInfoJpaEntity implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

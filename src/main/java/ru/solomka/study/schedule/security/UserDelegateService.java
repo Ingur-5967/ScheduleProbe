@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.security.User;
+import ru.solomka.study.schedule.api.model.user.User;
 import ru.solomka.study.schedule.api.repository.UserRepository;
 
 @Component

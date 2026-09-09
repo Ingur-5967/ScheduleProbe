@@ -3,8 +3,8 @@ package ru.solomka.study.schedule.model.mapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import ru.solomka.study.schedule.api.model.UserAdditionalInfo;
-import ru.solomka.study.schedule.api.model.security.User;
+import ru.solomka.study.schedule.api.model.user.UserAdditionalInfo;
+import ru.solomka.study.schedule.api.model.user.User;
 import ru.solomka.study.schedule.model.UserAdditionalInfoJpaEntity;
 import ru.solomka.study.schedule.model.UserJpaEntity;
 

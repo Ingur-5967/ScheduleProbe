@@ -8,7 +8,6 @@ import ru.solomka.study.schedule.api.model.lesson.Lesson;
 import ru.solomka.study.schedule.api.model.lesson.LessonTimeTag;
 import ru.solomka.study.schedule.controller.request.ScheduleEditRequest;
 import ru.solomka.study.schedule.controller.request.ScheduleTagSetRequest;
-import ru.solomka.study.schedule.security.annotation.OperatorPreAuthorize;
 import ru.solomka.study.schedule.security.annotation.TeacherPreAuthorize;
 import ru.solomka.study.schedule.service.LessonTimeTagService;
 import ru.solomka.study.schedule.service.ScheduleService;
@@ -29,7 +28,7 @@ public class ScheduleManageController {
     }
 
     @PostMapping(value = "/edit", produces = "application/json")
-    @OperatorPreAuthorize
+    @TeacherPreAuthorize
     public ResponseEntity<List<Lesson>> editScheduleForGroup(@RequestParam("groupId") String groupId,
                                                              @RequestBody ScheduleEditRequest scheduleEditRequest) {
         return ResponseEntity.ok(scheduleService.updateAllScheduleForGroup(groupId, scheduleEditRequest.scheduleInfo()));
@@ -40,5 +39,4 @@ public class ScheduleManageController {
     public ResponseEntity<List<LessonTimeTag>> assignTimeTagsForGroup(@RequestBody ScheduleTagSetRequest scheduleTagSetRequest) {
         return ResponseEntity.ok(lessonTimeTagService.assignLessonTimeTags(scheduleTagSetRequest.timeTags()));
     }
-
 }

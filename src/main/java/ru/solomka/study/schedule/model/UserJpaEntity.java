@@ -3,10 +3,10 @@ package ru.solomka.study.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.solomka.study.schedule.api.model.security.UserRole;
+import ru.solomka.study.schedule.api.model.user.UserRole;
+import ru.solomka.study.schedule.common.Identifiable;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserJpaEntity {
+public class UserJpaEntity implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")

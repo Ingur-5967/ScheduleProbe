@@ -8,22 +8,26 @@ import org.springframework.stereotype.Repository;
 import ru.solomka.study.schedule.model.LessonJpaEntity;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface LessonJpaRepository extends JpaRepository<LessonJpaEntity, UUID> {
+public interface LessonJpaRepository extends JpaRepository<LessonJpaEntity, Long> {
 
-    @Modifying(clearAutomatically = true)
-    @Query("DELETE FROM LessonJpaEntity e WHERE e.dayOfWeek IN :days")
-    void deleteLessonsInDaysOfWeek(@Param("days") List<Integer> days);
-
-    List<LessonJpaEntity> findAllByTeacherIdAndGroupId(Long teacherId, String groupId);
+    @Modifying
+    @Query("DELETE FROM LessonJpaEntity l WHERE l.groupId = :groupId AND l.dayOfWeek IN :days AND l.id NOT IN :excludeIds")
+    void deleteLessonsInDaysOfWeekExcludingIds(@Param("groupId") String groupId,
+                                               @Param("days") List<Integer> days,
+                                               @Param("excludeIds") List<Long> excludeIds);
 
     boolean existsByGroupIdAndTeacherId(String groupId, Long teacherId);
+
+    List<LessonJpaEntity> findAllByTeacherIdAndGroupId(Long teacherId, String groupId);
 
     List<LessonJpaEntity> findAllLessonByGroupId(String groupId);
 
     List<String> findAllRoomIdByGroupId(String groupId);
 
     List<String> findAllTeacherNameByGroupId(String groupId);
+
+    List<LessonJpaEntity> findByGroupIdAndDayOfWeekIn(String groupId, List<Integer> daysOfWeek);
 }
+

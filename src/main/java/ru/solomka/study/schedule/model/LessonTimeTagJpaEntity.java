@@ -3,6 +3,7 @@ package ru.solomka.study.schedule.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.solomka.study.schedule.common.Identifiable;
 
 import java.time.Instant;
 
@@ -14,7 +15,7 @@ import java.time.Instant;
 @NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonTimeTagJpaEntity {
+public class LessonTimeTagJpaEntity implements Identifiable<Long> {
 
     @Id
     Long id;
